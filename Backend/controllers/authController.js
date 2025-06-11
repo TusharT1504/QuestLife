@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 
 
-const register = async (req, res) => {
+const signup = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -99,6 +99,6 @@ const login = async (req, res) => {
 };
 
 module.exports = {
-  register,
+  signup,
   login,
 }; 

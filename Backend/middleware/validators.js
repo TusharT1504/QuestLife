@@ -1,6 +1,6 @@
 const { check } = require('express-validator');
 
-const registerValidation = [
+const signupValidation = [
   check('username', 'Username is required')
     .not()
     .isEmpty()
@@ -26,6 +26,6 @@ const loginValidation = [
 ];
 
 module.exports = {
-  registerValidation,
+  signupValidation,
   loginValidation
 }; 
