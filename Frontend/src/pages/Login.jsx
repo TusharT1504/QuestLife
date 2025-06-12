@@ -41,8 +41,8 @@ const Login = () => {
         password: formData.password
       });
       
-      // Redirect to home page after successful login
-      navigate('/');
+      // Redirect to dashboard after successful login
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'Login failed. Please try again.');
     } finally {

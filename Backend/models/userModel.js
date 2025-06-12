@@ -19,20 +19,32 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
     },
-
     level: {
       type: Number,
       default: 1,
     },
-
-    experience: {
+    xp: {
       type: Number,
-      default: 1,
+      default: 0,
     },
-
     coins: {
       type: Number,
-      default: 1,
+      default: 0,
+    },
+    streak: {
+      type: Number,
+      default: 0,
+    },
+    totalTasksCompleted: {
+      type: Number,
+      default: 0,
+    },
+    lastLoginDate: {
+      type: Date,
+    },
+    motivation: {
+      type: String,
+      default: "Keep pushing forward!",
     },
   },
   {

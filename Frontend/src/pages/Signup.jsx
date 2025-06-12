@@ -72,8 +72,8 @@ const Signup = () => {
         password: formData.password
       });
       
-      // Redirect to home page after successful signup
-      navigate('/');
+      // Redirect to dashboard after successful signup
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.');
     } finally {

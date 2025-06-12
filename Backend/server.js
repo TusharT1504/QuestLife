@@ -5,6 +5,8 @@ const cors = require("cors");
 
 const connectDB = require("./config/dbConnection");
 const authRoutes = require("./routes/authRoute");
+const dashboardRoutes = require("./routes/dashboardRoute");
+const taskRoutes = require("./routes/taskRoute");
 
 const app = express();
 app.use(cors());
@@ -23,7 +25,8 @@ app.get("/", (req, res) => {
 connectDB();
 
 app.use("/api/auth", authRoutes);
-// app.use('/api/tasks');
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/tasks", taskRoutes);
 // app.use('/api/profile');
 // app.use('/api/marketplace');
 // app.use('/api/logs');

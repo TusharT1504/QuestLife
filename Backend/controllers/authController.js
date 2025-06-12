@@ -2,6 +2,7 @@ const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
+const { generateSampleTasks } = require('./dashboardController');
 
 
 const signup = async (req, res) => {
@@ -31,6 +32,9 @@ const signup = async (req, res) => {
     user.password= await bcrypt.hash(password,salt);
 
     await user.save();
+
+    // Generate sample tasks for new user
+    await generateSampleTasks(user.id);
 
     //create JWT token
     const payload={
@@ -75,6 +79,10 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
+
+    // Update last login date
+    user.lastLoginDate = new Date();
+    await user.save();
 
     // Create JWT token
     const payload = {

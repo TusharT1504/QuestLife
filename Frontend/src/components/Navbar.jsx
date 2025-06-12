@@ -8,9 +8,6 @@ const Navbar = () => {
 
   const navLinks = [
     { path: '/', label: 'Home' },
-    { path: '/dummy2', label: 'Dummy2' },
-    { path: '/dummy3', label: 'Dummy3' },
-    { path: '/dummy4', label: 'Dummy4' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -47,6 +44,30 @@ const Navbar = () => {
                   {link.label}
                 </Link>
               ))}
+              {isAuthenticated && (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                      isActive('/dashboard')
+                        ? 'text-black bg-gray-200'
+                        : 'text-gray-600 hover:text-black hover:bg-gray-200'
+                    }`}
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/habits"
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                      isActive('/habits')
+                        ? 'text-black bg-gray-200'
+                        : 'text-gray-600 hover:text-black hover:bg-gray-200'
+                    }`}
+                  >
+                    Habits
+                  </Link>
+                </>
+              )}
             </div>
           </div>
 
@@ -108,6 +129,30 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
+            {isAuthenticated && (
+              <>
+                <Link
+                  to="/dashboard"
+                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
+                    isActive('/dashboard')
+                      ? 'text-black bg-gray-200'
+                      : 'text-gray-600 hover:text-black hover:bg-gray-200'
+                  }`}
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/habits"
+                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
+                    isActive('/habits')
+                      ? 'text-black bg-gray-200'
+                      : 'text-gray-600 hover:text-black hover:bg-gray-200'
+                  }`}
+                >
+                  Habits
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
