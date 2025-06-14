@@ -4,9 +4,14 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const connectDB = require("./config/dbConnection");
+const { initCronJobs } = require("./utils/cronJobs");
+const { seedMarketplaceItems } = require("./utils/seedMarketplace");
 const authRoutes = require("./routes/authRoute");
 const dashboardRoutes = require("./routes/dashboardRoute");
 const taskRoutes = require("./routes/taskRoute");
+const marketplaceRoutes = require("./routes/marketplaceRoute");
+const taskHistoryRoutes = require("./routes/taskHistoryRoute");
+const profileRoutes = require("./routes/profileRoute");
 
 const app = express();
 app.use(cors());
@@ -22,11 +27,20 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-connectDB();
+connectDB().then(async () => {
+  // Initialize cron jobs after database connection
+  initCronJobs();
+  
+  // Seed marketplace with initial items
+  await seedMarketplaceItems();
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/marketplace", marketplaceRoutes);
+app.use("/api/history", taskHistoryRoutes);
+app.use("/api/profile", profileRoutes);
 // app.use('/api/profile');
 // app.use('/api/marketplace');
 // app.use('/api/logs');

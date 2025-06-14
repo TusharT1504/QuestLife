@@ -24,7 +24,16 @@ const Dashboard = () => {
 
         setUserStats(stats);
         setUserProfile(profile);
-        setTodayTasks(tasks);
+        
+        // Sort tasks by priority (high first) then by creation date
+        const sortedTasks = tasks.sort((a, b) => {
+          const priorityOrder = { high: 3, medium: 2, low: 1 };
+          const priorityDiff = priorityOrder[b.priority] - priorityOrder[a.priority];
+          if (priorityDiff !== 0) return priorityDiff;
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+        
+        setTodayTasks(sortedTasks);
       } catch (err) {
         setError('Failed to load dashboard data');
         console.error('Dashboard data error:', err);
@@ -96,65 +105,38 @@ const Dashboard = () => {
     return "Good evening";
   };
 
-  const calculateXPProgress = () => {
-    if (!userStats) return 0;
-    
-    // Calculate XP required for current level
-    const currentLevelXP = Math.pow(userStats.level, 2) * 100;
-    
-    // Calculate XP required for next level
-    const nextLevelXP = Math.pow(userStats.level + 1, 2) * 100;
-    
-    // Calculate how much XP user has in current level
-    const xpInCurrentLevel = userStats.xp - currentLevelXP;
-    
-    // Calculate XP needed to reach next level
-    const xpNeededForNextLevel = nextLevelXP - currentLevelXP;
-    
-    // Calculate percentage of current level completed (0-100)
-    const percentage = (xpInCurrentLevel / xpNeededForNextLevel) * 100;
-    
-    // Ensure percentage is between 0 and 100
-    return Math.min(100, Math.max(0, percentage));
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'high': return 'bg-red-100 text-red-800 border-red-200';
+      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'low': return 'bg-green-100 text-green-800 border-green-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
   };
 
-  const getCurrentLevelXPInfo = () => {
-    if (!userStats) return { current: 0, needed: 0 };
-    
-    // Calculate XP required for current level
-    const currentLevelXP = Math.pow(userStats.level, 2) * 100;
-    
-    // Calculate XP required for next level
-    const nextLevelXP = Math.pow(userStats.level + 1, 2) * 100;
-    
-    // Calculate how much XP user has in current level
-    const xpInCurrentLevel = userStats.xp - currentLevelXP;
-    
-    // Calculate XP needed to reach next level
-    const xpNeededForNextLevel = nextLevelXP - currentLevelXP;
-    
-    return {
-      current: Math.max(0, xpInCurrentLevel),
-      needed: xpNeededForNextLevel
-    };
+  const getCategoryIcon = (category) => {
+    switch (category) {
+      case 'daily': return '📅';
+      case 'weekly': return '📊';
+      case 'monthly': return '📈';
+      default: return '📝';
+    }
   };
 
-  const getXPNeededForNextLevel = () => {
-    if (!userStats) return 0;
-    
-    // Calculate XP required for current level
-    const currentLevelXP = Math.pow(userStats.level, 2) * 100;
-    
-    // Calculate XP required for next level
-    const nextLevelXP = Math.pow(userStats.level + 1, 2) * 100;
-    
-    // Calculate how much XP user has in current level
-    const xpInCurrentLevel = userStats.xp - currentLevelXP;
-    
-    // Calculate XP needed to reach next level
-    const xpNeededForNextLevel = nextLevelXP - currentLevelXP;
-    
-    return xpNeededForNextLevel - xpInCurrentLevel;
+  // XP/Level Progress Calculation Helpers
+  const getLevelThreshold = (level) => (level * level) * 100;
+  const getPrevLevelThreshold = (level) => ((level - 1) * (level - 1)) * 100;
+
+  const getLevelProgressInfo = () => {
+    if (!userStats) return { current: 0, needed: 1, percent: 0 };
+    const level = userStats.level;
+    const xp = userStats.xp;
+    const prevLevelXP = getPrevLevelThreshold(level);
+    const nextLevelXP = getLevelThreshold(level);
+    const xpInLevel = xp - prevLevelXP;
+    const xpNeeded = nextLevelXP - prevLevelXP;
+    const percent = Math.max(0, Math.min(100, (xpInLevel / xpNeeded) * 100));
+    return { current: Math.max(0, xpInLevel), needed: xpNeeded, percent };
   };
 
   if (!isAuthenticated) {
@@ -211,12 +193,12 @@ const Dashboard = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
             <span>Level {userStats?.level}</span>
-            <span>{userStats?.xp} XP • {getXPNeededForNextLevel()} XP to next level</span>
+            <span>{getLevelProgressInfo().current} / {getLevelProgressInfo().needed} XP</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
               className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${calculateXPProgress()}%` }}
+              style={{ width: `${getLevelProgressInfo().percent}%` }}
             ></div>
           </div>
         </div>
@@ -267,6 +249,12 @@ const Dashboard = () => {
                                 'bg-red-100 text-red-800'
                               }`}>
                                 {task.difficulty}
+                              </span>
+                              <span className={`text-xs px-2 py-1 rounded-full border ${getPriorityColor(task.priority)}`}>
+                                {task.priority}
+                              </span>
+                              <span className="text-xs px-2 py-1 rounded-full border bg-blue-100 text-blue-800 border-blue-200">
+                                {getCategoryIcon(task.category)} {task.category}
                               </span>
                             </div>
                           </div>

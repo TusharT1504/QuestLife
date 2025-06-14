@@ -14,15 +14,39 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+
+  // Fetch user profile from backend
+  const fetchUserProfile = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      const response = await fetch('http://localhost:5000/api/profile', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data);
+      } else {
+        setUser(null);
+      }
+    } catch (error) {
+      setUser(null);
+    }
+  };
 
   useEffect(() => {
     // Check if user is authenticated on app load
-    const checkAuth = () => {
+    const checkAuth = async () => {
       const authenticated = authService.isAuthenticated();
       setIsAuthenticated(authenticated);
+      if (authenticated) {
+        await fetchUserProfile();
+      }
       setLoading(false);
     };
-
     checkAuth();
   }, []);
 
@@ -30,6 +54,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await authService.login(credentials);
       setIsAuthenticated(true);
+      await fetchUserProfile();
       return data;
     } catch (error) {
       throw error;
@@ -40,6 +65,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const data = await authService.signup(userData);
       setIsAuthenticated(true);
+      await fetchUserProfile();
       return data;
     } catch (error) {
       throw error;
@@ -49,11 +75,19 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     authService.logout();
     setIsAuthenticated(false);
+    setUser(null);
+  };
+
+  // Allow components to update user (e.g., after profile edit, coin/xp change)
+  const updateUser = (newUser) => {
+    setUser((prev) => ({ ...prev, ...newUser }));
   };
 
   const value = {
     isAuthenticated,
     loading,
+    user,
+    updateUser,
     login,
     signup,
     logout,

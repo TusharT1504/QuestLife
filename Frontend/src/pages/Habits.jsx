@@ -3,7 +3,13 @@ import { habitsService } from '../services/habitsService';
 
 const Habits = () => {
   const [habits, setHabits] = useState([]);
-  const [form, setForm] = useState({ title: '', description: '', difficulty: 'medium' });
+  const [form, setForm] = useState({ 
+    title: '', 
+    description: '', 
+    difficulty: 'medium',
+    category: 'daily',
+    priority: 'medium'
+  });
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -41,7 +47,13 @@ const Habits = () => {
       } else {
         await habitsService.addHabit(form);
       }
-      setForm({ title: '', description: '', difficulty: 'medium' });
+      setForm({ 
+        title: '', 
+        description: '', 
+        difficulty: 'medium',
+        category: 'daily',
+        priority: 'medium'
+      });
       setEditingId(null);
       fetchHabits();
     } catch (err) {
@@ -55,7 +67,9 @@ const Habits = () => {
     setForm({ 
       title: habit.title, 
       description: habit.description || '', 
-      difficulty: habit.difficulty || 'medium' 
+      difficulty: habit.difficulty || 'medium',
+      category: habit.category || 'daily',
+      priority: habit.priority || 'medium'
     });
     setEditingId(habit.id);
   };
@@ -83,6 +97,24 @@ const Habits = () => {
     }
   };
 
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'high': return 'bg-red-100 text-red-800 border-red-200';
+      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'low': return 'bg-green-100 text-green-800 border-green-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  const getCategoryIcon = (category) => {
+    switch (category) {
+      case 'daily': return '📅';
+      case 'weekly': return '📊';
+      case 'monthly': return '📈';
+      default: return '📝';
+    }
+  };
+
   const getRewards = (difficulty) => {
     switch (difficulty) {
       case 'easy': return { xp: 10, coins: 5 };
@@ -99,7 +131,7 @@ const Habits = () => {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-black mb-2">Habits & Todos</h1>
           <p className="text-gray-600">Build better habits, one task at a time</p>
-          <p className="text-sm text-gray-500 mt-2">Once completed, tasks remain completed permanently</p>
+          <p className="text-sm text-gray-500 mt-2">Tasks reset based on their category (daily/weekly/monthly)</p>
         </div>
 
         {/* Form */}
@@ -138,21 +170,57 @@ const Habits = () => {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Difficulty Level
-              </label>
-              <select
-                name="difficulty"
-                value={form.difficulty}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                disabled={loading}
-              >
-                <option value="easy">Easy (10 XP, 5 Coins)</option>
-                <option value="medium">Medium (25 XP, 10 Coins)</option>
-                <option value="hard">Hard (50 XP, 20 Coins)</option>
-              </select>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Difficulty Level
+                </label>
+                <select
+                  name="difficulty"
+                  value={form.difficulty}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                  disabled={loading}
+                >
+                  <option value="easy">Easy (10 XP, 5 Coins)</option>
+                  <option value="medium">Medium (25 XP, 10 Coins)</option>
+                  <option value="hard">Hard (50 XP, 20 Coins)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Category
+                </label>
+                <select
+                  name="category"
+                  value={form.category}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                  disabled={loading}
+                >
+                  <option value="daily">📅 Daily (resets daily)</option>
+                  <option value="weekly">📊 Weekly (resets weekly)</option>
+                  <option value="monthly">📈 Monthly (resets monthly)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Priority
+                </label>
+                <select
+                  name="priority"
+                  value={form.priority}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                  disabled={loading}
+                >
+                  <option value="low">🟢 Low Priority</option>
+                  <option value="medium">🟡 Medium Priority</option>
+                  <option value="high">🔴 High Priority</option>
+                </select>
+              </div>
             </div>
 
             <div className="flex items-center justify-between pt-4">
@@ -169,7 +237,13 @@ const Habits = () => {
                   className="text-gray-600 hover:text-black font-medium"
                   onClick={() => { 
                     setEditingId(null); 
-                    setForm({ title: '', description: '', difficulty: 'medium' }); 
+                    setForm({ 
+                      title: '', 
+                      description: '', 
+                      difficulty: 'medium',
+                      category: 'daily',
+                      priority: 'medium'
+                    }); 
                   }}
                 >
                   Cancel Edit
@@ -207,6 +281,12 @@ const Habits = () => {
                         <h3 className="text-lg font-semibold text-black">{habit.title}</h3>
                         <span className={`text-xs px-3 py-1 rounded-full border ${getDifficultyColor(habit.difficulty)}`}>
                           {habit.difficulty}
+                        </span>
+                        <span className={`text-xs px-3 py-1 rounded-full border ${getPriorityColor(habit.priority)}`}>
+                          {habit.priority}
+                        </span>
+                        <span className="text-xs px-3 py-1 rounded-full border bg-blue-100 text-blue-800 border-blue-200">
+                          {getCategoryIcon(habit.category)} {habit.category}
                         </span>
                       </div>
                       

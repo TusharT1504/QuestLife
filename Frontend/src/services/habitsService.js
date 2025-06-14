@@ -26,6 +26,8 @@ export const habitsService = {
       ...t, 
       id: t._id,
       difficulty: t.difficulty || 'medium',
+      category: t.category || 'daily',
+      priority: t.priority || 'medium',
       coinReward: t.coinReward || 10
     }));
   },
