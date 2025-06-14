@@ -1,73 +1,68 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+"use client"
+
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
 
 const Login = () => {
-  const navigate = useNavigate();
-  const { login } = useAuth();
+  const navigate = useNavigate()
+  const { login } = useAuth()
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    rememberMe: false
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+    email: "",
+    password: "",
+    rememberMe: false,
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    const { name, value, type, checked } = e.target
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-    // Clear error when user starts typing
-    if (error) setError('');
-  };
+      [name]: type === "checkbox" ? checked : value,
+    }))
+    if (error) setError("")
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Basic validation
+    e.preventDefault()
+
     if (!formData.email || !formData.password) {
-      setError('Please fill in all fields');
-      return;
+      setError("Please fill in all fields")
+      return
     }
 
-    setLoading(true);
-    setError('');
+    setLoading(true)
+    setError("")
 
     try {
       await login({
         email: formData.email,
-        password: formData.password
-      });
-      
-      // Redirect to dashboard after successful login
-      navigate('/dashboard');
+        password: formData.password,
+      })
+
+      navigate("/dashboard")
     } catch (err) {
-      setError(err.message || 'Login failed. Please try again.');
+      setError(err.message || "Login failed. Please try again.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center px-4">
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center px-6">
       <div className="w-full max-w-md">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-black mb-2">
-            Welcome Back
-          </h1>
-          <p className="text-gray-600">
-            Sign in to your Quest Life account
-          </p>
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-semibold text-gray-900 mb-4">Welcome Back</h1>
+          <p className="text-lg text-gray-600">Sign in to your Quest Life account</p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white rounded-xl shadow-md p-8">
+        <div className="bg-white rounded-2xl shadow-md p-8">
           {/* Error Message */}
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-2xl">
               <p className="text-red-600 text-sm">{error}</p>
             </div>
           )}
@@ -75,7 +70,7 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-black mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-3">
                 Email
               </label>
               <input
@@ -86,14 +81,14 @@ const Login = () => {
                 onChange={handleChange}
                 required
                 disabled={loading}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-4 border border-gray-300 rounded-2xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder="Enter your email"
               />
             </div>
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-black mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-900 mb-3">
                 Password
               </label>
               <input
@@ -104,7 +99,7 @@ const Login = () => {
                 onChange={handleChange}
                 required
                 disabled={loading}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-4 border border-gray-300 rounded-2xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-transparent transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder="Enter your password"
               />
             </div>
@@ -119,15 +114,15 @@ const Login = () => {
                   checked={formData.rememberMe}
                   onChange={handleChange}
                   disabled={loading}
-                  className="h-4 w-4 text-black border-gray-300 rounded focus:ring-black focus:ring-2 disabled:opacity-50"
+                  className="h-4 w-4 text-gray-800 border-gray-300 rounded focus:ring-gray-800 focus:ring-2 disabled:opacity-50"
                 />
-                <label htmlFor="rememberMe" className="ml-2 text-sm text-gray-600">
+                <label htmlFor="rememberMe" className="ml-3 text-sm text-gray-600">
                   Remember me
                 </label>
               </div>
               <Link
                 to="/forgot-password"
-                className="text-sm text-gray-500 hover:text-black transition-colors duration-200"
+                className="text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200"
               >
                 Forgot password?
               </Link>
@@ -137,38 +132,29 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-4 px-4 rounded-2xl transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {loading ? (
-                <>
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Signing In...
-                </>
+                "Signing In..."
               ) : (
-                'Sign In'
+                "Sign In"
               )}
             </button>
           </form>
         </div>
 
         {/* Signup Link */}
-        <div className="text-center mt-6">
+        <div className="text-center mt-8">
           <p className="text-gray-600">
-            Don't have an account?{' '}
-            <Link
-              to="/signup"
-              className="text-black hover:text-gray-800 font-medium transition-colors duration-200"
-            >
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-gray-900 hover:text-gray-700 font-medium transition-colors duration-200">
               Sign up
             </Link>
           </p>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Login; 
+export default Login
