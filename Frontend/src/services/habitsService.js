@@ -25,9 +25,7 @@ export const habitsService = {
     return data.map((t) => ({ 
       ...t, 
       id: t._id,
-      difficulty: t.difficulty || 'medium',
-      category: t.category || 'daily',
-      priority: t.priority || 'medium',
+      difficulty: t.difficulty || 'rare',
       coinReward: t.coinReward || 10
     }));
   },

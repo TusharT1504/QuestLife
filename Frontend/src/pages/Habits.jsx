@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react"
 import { habitsService } from "../services/habitsService"
 import { useAuth } from "../context/AuthContext"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPenToSquare,faTrash } from '@fortawesome/free-solid-svg-icons'
+
 
 const Habits = () => {
   const { isAuthenticated } = useAuth()
@@ -14,9 +17,7 @@ const Habits = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    difficulty: "easy",
-    category: "daily",
-    priority: "medium",
+    difficulty: "common",
   })
 
   useEffect(() => {
@@ -82,9 +83,7 @@ const Habits = () => {
     setFormData({
       title: "",
       description: "",
-      difficulty: "easy",
-      category: "daily",
-      priority: "medium",
+      difficulty: "common",
     })
     setIsModalOpen(true)
   }
@@ -95,8 +94,6 @@ const Habits = () => {
       title: task.title,
       description: task.description,
       difficulty: task.difficulty,
-      category: task.category,
-      priority: task.priority,
     })
     setIsModalOpen(true)
   }
@@ -106,29 +103,25 @@ const Habits = () => {
     setCurrentTask(null)
   }
 
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty) {
-      case "easy":
-        return "bg-green-100 text-green-800"
-      case "medium":
-        return "bg-yellow-100 text-yellow-800"
-      case "hard":
-        return "bg-red-100 text-red-800"
-      default:
-        return "bg-gray-100 text-gray-800"
-    }
+  const rarityColors = {
+    common: "border-gray-300 bg-gray-50",
+    rare: "border-blue-300 bg-blue-50",
+    epic: "border-purple-300 bg-purple-50",
+    legendary: "border-yellow-300 bg-yellow-50",
   }
 
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case "high":
-        return "bg-red-100 text-red-800 border-red-200"
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200"
-      case "low":
-        return "bg-green-100 text-green-800 border-green-200"
+  const getDifficultyColor = (difficulty) => {
+    switch (difficulty) {
+      case "common":
+        return "bg-gray-50 text-gray-800 border border-gray-300"
+      case "rare":
+        return "bg-blue-50 text-blue-800 border border-blue-300"
+      case "epic":
+        return "bg-purple-50 text-purple-800 border border-purple-300"
+      case "legendary":
+        return "bg-yellow-50 text-yellow-800 border border-yellow-300"
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200"
+        return "bg-gray-50 text-gray-800 border border-gray-300"
     }
   }
 
@@ -178,7 +171,7 @@ const Habits = () => {
           <h1 className="text-2xl font-semibold text-gray-900">My Habits</h1>
           <button
             onClick={openCreateModal}
-            className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors duration-200"
+            className="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition-colors duration-200"
           >
             Add New Habit
           </button>
@@ -200,26 +193,20 @@ const Habits = () => {
                       <span className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(task.difficulty)}`}>
                         {task.difficulty}
                       </span>
-                      <span className={`text-xs px-2 py-1 rounded-full border ${getPriorityColor(task.priority)}`}>
-                        {task.priority}
-                      </span>
-                      <span className={`text-xs px-2 py-1 rounded-full border bg-blue-100 text-blue-800 border-blue-200`}>
-                        {task.category}
-                      </span>
                     </div>
                   </div>
                   <div className="flex space-x-3">
                     <button
                       onClick={() => openEditModal(task)}
-                      className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      className="text-gray-800 hover:text-gray-900 text-lg font-medium"
                     >
-                      Edit
+                      <FontAwesomeIcon icon={faPenToSquare} />
                     </button>
                     <button
                       onClick={() => handleDeleteTask(task.id)}
-                      className="text-red-600 hover:text-red-800 text-sm font-medium"
+                      className="text-gray-800 hover:text-gray-900 text-lg font-medium"
                     >
-                      Delete
+                      <FontAwesomeIcon icon={faTrash} />
                     </button>
                   </div>
                 </div>
@@ -244,7 +231,7 @@ const Habits = () => {
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-gray-800 focus:border-gray-800"
                     required
                   />
                 </div>
@@ -256,10 +243,10 @@ const Habits = () => {
                     value={formData.description}
                     onChange={handleInputChange}
                     rows="3"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-gray-800 focus:border-gray-900"
                   ></textarea>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <label htmlFor="difficulty" className="block text-sm font-medium text-gray-700 mb-1">Difficulty</label>
                     <select
@@ -267,39 +254,12 @@ const Habits = () => {
                       name="difficulty"
                       value={formData.difficulty}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-gray-800 focus:border-gray-900"
                     >
-                      <option value="easy">Easy</option>
-                      <option value="medium">Medium</option>
-                      <option value="hard">Hard</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                    <select
-                      id="category"
-                      name="category"
-                      value={formData.category}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                    >
-                      <option value="daily">Daily</option>
-                      <option value="weekly">Weekly</option>
-                      <option value="monthly">Monthly</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
-                    <select
-                      id="priority"
-                      name="priority"
-                      value={formData.priority}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500"
-                    >
-                      <option value="low">Low</option>
-                      <option value="medium">Medium</option>
-                      <option value="high">High</option>
+                      <option value="common">Common</option>
+                      <option value="rare">Rare</option>
+                      <option value="epic">Epic</option>
+                      <option value="legendary">Legendary</option>
                     </select>
                   </div>
                 </div>
@@ -313,7 +273,7 @@ const Habits = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors duration-200"
+                    className="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition-colors duration-200"
                   >
                     {currentTask ? "Save Changes" : "Add Habit"}
                   </button>

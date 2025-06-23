@@ -29,12 +29,8 @@ const Dashboard = () => {
         setUserStats(stats)
         setUserProfile(profile)
 
-        const sortedTasks = tasks.sort((a, b) => {
-          const priorityOrder = { high: 3, medium: 2, low: 1 }
-          const priorityDiff = priorityOrder[b.priority] - priorityOrder[a.priority]
-          if (priorityDiff !== 0) return priorityDiff
-          return new Date(b.createdAt) - new Date(a.createdAt)
-        })
+        // Sort tasks by creation date (newest first)
+        const sortedTasks = tasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
         setTodayTasks(sortedTasks)
       } catch (err) {
@@ -100,19 +96,6 @@ const Dashboard = () => {
     return "Good evening"
   }
 
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case "high":
-        return "bg-red-100 text-red-800 border-red-200"
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200"
-      case "low":
-        return "bg-green-100 text-green-800 border-green-200"
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200"
-    }
-  }
-
   const getLevelThreshold = (level) => level * level * 100
   const getPrevLevelThreshold = (level) => (level - 1) * (level - 1) * 100
 
@@ -167,6 +150,13 @@ const Dashboard = () => {
     )
   }
 
+  const rarityColors = {
+    common: "border-gray-300 bg-gray-50",
+    rare: "border-blue-300 bg-blue-50",
+    epic: "border-purple-300 bg-purple-50",
+    legendary: "border-yellow-300 bg-yellow-50",
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
@@ -209,9 +199,16 @@ const Dashboard = () => {
                     {todayTasks.filter(task => !task.completed).map((task) => (
                       <div
                         key={task.id}
-                        className={`flex items-center justify-between p-6 rounded-2xl border transition-all duration-200 ${
-                          "bg-white border-gray-200 hover:bg-gray-50"
-                        }`}
+                        className={`flex items-center justify-between p-6 rounded-2xl transition-all duration-200 
+                          border-l-4 ${
+                            task.difficulty === "common"
+                              ? "border-l-gray-400 bg-gray-50/50"
+                              : task.difficulty === "rare"
+                                ? "border-l-blue-400 bg-blue-50/50"
+                                : task.difficulty === "epic"
+                                  ? "border-l-purple-400 bg-purple-50/50"
+                                  : "border-l-yellow-400 bg-yellow-50/50"
+                          } shadow-sm hover:shadow-md`}
                       >
                         <div className="flex items-center space-x-4">
                           <input
@@ -219,7 +216,7 @@ const Dashboard = () => {
                             checked={task.completed}
                             onChange={() => !task.completed && handleTaskToggle(task.id)}
                             disabled={task.completed || loading}
-                            className={`h-5 w-5 border-gray-300 rounded focus:ring-gray-800 ${
+                            className={`h-5 w-5 border-gray-300 rounded-full focus:ring-gray-800 focus:ring-2 ${
                               task.completed ? "text-green-600 bg-green-100 cursor-not-allowed" : "text-gray-800"
                             }`}
                           />
@@ -233,30 +230,26 @@ const Dashboard = () => {
                             </span>
                             <div className="flex items-center space-x-3 mt-2">
                               <span
-                                className={`text-xs px-3 py-1 rounded-full ${
-                                  task.difficulty === "easy"
-                                    ? "bg-green-50 text-green-700 border border-green-200"
-                                    : task.difficulty === "medium"
-                                      ? "bg-yellow-50 text-yellow-700 border border-yellow-200"
-                                      : "bg-red-50 text-red-700 border border-red-200"
+                                className={`text-xs px-3 py-1 rounded-full font-medium ${
+                                  task.difficulty === "common"
+                                    ? "bg-gray-100/80 text-gray-700 border border-gray-300"
+                                    : task.difficulty === "rare"
+                                      ? "bg-blue-100/80 text-blue-700 border border-blue-300"
+                                      : task.difficulty === "epic"
+                                        ? "bg-purple-100/80 text-purple-700 border border-purple-300"
+                                        : "bg-yellow-100/80 text-yellow-700 border border-yellow-300"
                                 }`}
                               >
                                 {task.difficulty}
-                              </span>
-                              <span
-                                className={`text-xs px-3 py-1 rounded-full border ${getPriorityColor(task.priority)}`}
-                              >
-                                {task.priority}
-                              </span>
-                              <span className="text-xs px-3 py-1 rounded-full border bg-blue-50 text-blue-700 border-blue-200">
-                                 {task.category}
                               </span>
                             </div>
                           </div>
                         </div>
                         <div className="flex items-center space-x-4">
-                          <span className="text-sm text-green-600 font-medium">+{task.xpReward} XP</span>
-                          <span className="text-sm text-yellow-600 font-medium flex items-center">+{task.coinReward} <FontAwesomeIcon icon={faCoins} className="ml-1" /></span>
+                          <span className="text-sm bg-green-50 text-green-700 px-3 py-1 rounded-lg font-medium">+{task.xpReward} XP</span>
+                          <span className="text-sm bg-yellow-50 text-yellow-700 px-3 py-1 rounded-lg font-medium flex items-center">
+                            +{task.coinReward} <FontAwesomeIcon icon={faCoins} className="ml-1" />
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -279,41 +272,48 @@ const Dashboard = () => {
             {/* Completed Tasks Section */}
             {todayTasks.filter(task => task.completed).length > 0 && (
               <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-8 mt-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-6">Completed Tasks</h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">🎉 Completed Tasks</h2>
                 <div className="space-y-4">
                   {todayTasks.filter(task => task.completed).map((task) => (
                     <div
                       key={task.id}
-                      className="flex items-center justify-between p-6 rounded-2xl border bg-green-50 border-green-200"
+                      className={`flex items-center justify-between p-6 rounded-2xl border transition-all duration-200 ${
+                        task.difficulty === "common"
+                          ? "bg-gray-50 border-gray-300"
+                          : task.difficulty === "rare"
+                            ? "bg-blue-50 border-blue-300"
+                            : task.difficulty === "epic"
+                              ? "bg-purple-50 border-purple-300"
+                              : "bg-yellow-50 border-yellow-300"
+                      }`}
                     >
                       <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-green-500">✓</span>
-                          <span className="text-xs text-gray-500">Completed</span>
-                        </div>
+                        <span className={`text-lg ${
+                          task.difficulty === "common"
+                            ? "text-gray-500"
+                            : task.difficulty === "rare"
+                              ? "text-blue-600"
+                              : task.difficulty === "epic"
+                                ? "text-purple-600"
+                                : "text-yellow-600"
+                        }`}>✓</span>
                         <div>
-                          <span className="font-medium text-lg line-through text-gray-500">
+                          <span className="font-medium text-lg line-through text-gray-600">
                             {task.title}
                           </span>
                           <div className="flex items-center space-x-3 mt-2">
                             <span
                               className={`text-xs px-3 py-1 rounded-full ${
-                                task.difficulty === "easy"
-                                  ? "bg-green-50 text-green-700 border border-green-200"
-                                  : task.difficulty === "medium"
-                                    ? "bg-yellow-50 text-yellow-700 border border-yellow-200"
-                                    : "bg-red-50 text-red-700 border border-red-200"
+                                task.difficulty === "common"
+                                  ? "bg-gray-100 text-gray-700 border border-gray-300"
+                                  : task.difficulty === "rare"
+                                    ? "bg-blue-100 text-blue-700 border border-blue-300"
+                                    : task.difficulty === "epic"
+                                      ? "bg-purple-100 text-purple-700 border border-purple-300"
+                                      : "bg-yellow-100 text-yellow-700 border border-yellow-300"
                               }`}
                             >
                               {task.difficulty}
-                            </span>
-                            <span
-                              className={`text-xs px-3 py-1 rounded-full border ${getPriorityColor(task.priority)}`}
-                            >
-                              {task.priority}
-                            </span>
-                            <span className="text-xs px-3 py-1 rounded-full border bg-blue-50 text-blue-700 border-blue-200">
-                               {task.category}
                             </span>
                           </div>
                         </div>

@@ -13,15 +13,18 @@ const marketplaceRoutes = require("./routes/marketplaceRoute");
 const taskHistoryRoutes = require("./routes/taskHistoryRoute");
 const profileRoutes = require("./routes/profileRoute");
 
-const app = express();
+const app = express();   
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files from the 'public' directory
+app.use(express.static('public'));
+
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
   next();
-});
+});    
 
 app.get("/", (req, res) => {
   res.send("Hello World");
@@ -41,9 +44,6 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/marketplace", marketplaceRoutes);
 app.use("/api/history", taskHistoryRoutes);
 app.use("/api/profile", profileRoutes);
-// app.use('/api/profile');
-// app.use('/api/marketplace');
-// app.use('/api/logs');
 
 app.use((err, req, res, next) => {
   console.error(" Error:", err.stack);

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthContext"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCoins } from '@fortawesome/free-solid-svg-icons'
+import { faCoins , faStar } from '@fortawesome/free-solid-svg-icons'
 
 const TaskHistory = () => {
   const { user } = useAuth()
@@ -21,9 +21,10 @@ const TaskHistory = () => {
   ]
 
   const difficultyColors = {
-    easy: "bg-green-50 text-green-700 border-green-200",
-    medium: "bg-yellow-50 text-yellow-700 border-yellow-200",
-    hard: "bg-red-50 text-red-700 border-red-200",
+    common: "border-gray-300 bg-gray-50 text-gray-700",
+    rare: "border-blue-300 bg-blue-50 text-blue-700",
+    epic: "border-purple-300 bg-purple-50 text-purple-700",
+    legendary: "border-yellow-300 bg-yellow-50 text-yellow-700",
   }
 
   useEffect(() => {
@@ -209,51 +210,31 @@ const TaskHistory = () => {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="flex items-center space-x-3">
-                    <span className="w-4 h-4 bg-green-400 rounded-full"></span>
-                    <span className="text-gray-600">Easy</span>
+                    <span className={`w-3 h-3 rounded-full bg-gray-400`}></span>
+                    <span className="text-gray-600">Common</span>
                   </span>
-                  <span className="font-semibold text-gray-900">{stats.byDifficulty.easy}</span>
+                  <span className="font-semibold text-gray-900">{stats.byDifficulty.common}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="flex items-center space-x-3">
-                    <span className="w-4 h-4 bg-yellow-400 rounded-full"></span>
-                    <span className="text-gray-600">Medium</span>
+                    <span className={`w-3 h-3 rounded-full bg-blue-400`}></span>
+                    <span className="text-gray-600">Rare</span>
                   </span>
-                  <span className="font-semibold text-gray-900">{stats.byDifficulty.medium}</span>
+                  <span className="font-semibold text-gray-900">{stats.byDifficulty.rare}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="flex items-center space-x-3">
-                    <span className="w-4 h-4 bg-red-400 rounded-full"></span>
-                    <span className="text-gray-600">Hard</span>
+                    <span className={`w-3 h-3 rounded-full bg-purple-400`}></span>
+                    <span className="text-gray-600">Epic</span>
                   </span>
-                  <span className="font-semibold text-gray-900">{stats.byDifficulty.hard}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-md p-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-6">By Category</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center space-x-3">
-                    <span className="text-xl">📅</span>
-                    <span className="text-gray-600">Daily</span>
-                  </span>
-                  <span className="font-semibold text-gray-900">{stats.byCategory.daily}</span>
+                  <span className="font-semibold text-gray-900">{stats.byDifficulty.epic}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="flex items-center space-x-3">
-                    <span className="text-xl">📊</span>
-                    <span className="text-gray-600">Weekly</span>
+                    <span className={`w-3 h-3 rounded-full bg-yellow-400`}></span>
+                    <span className="text-gray-600">Legendary</span>
                   </span>
-                  <span className="font-semibold text-gray-900">{stats.byCategory.weekly}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center space-x-3">
-                    <span className="text-xl">📈</span>
-                    <span className="text-gray-600">Monthly</span>
-                  </span>
-                  <span className="font-semibold text-gray-900">{stats.byCategory.monthly}</span>
+                  <span className="font-semibold text-gray-900">{stats.byDifficulty.legendary}</span>
                 </div>
               </div>
             </div>
@@ -278,13 +259,10 @@ const TaskHistory = () => {
                             <h4 className="font-semibold text-gray-900 text-lg">{task.title}</h4>
                             {task.description && <p className="text-sm text-gray-600 mt-1">{task.description}</p>}
                             <div className="flex items-center space-x-3 mt-2 text-sm">
-                              <span className="font-medium">{task.xpReward} XP</span>
-                              <span className="font-medium flex items-center">{task.coinReward} <FontAwesomeIcon icon={faCoins} className="ml-1 text-yellow-500" /> Coins</span>
+                              <span className="font-medium"><FontAwesomeIcon icon={faStar} className="ml-1" /> {task.xpReward}</span>
+                              <span className="font-medium flex items-center">{task.coinReward} <FontAwesomeIcon icon={faCoins} className="ml-1" /></span>
                               <span className={`px-3 py-1 rounded-full text-xs font-medium border ${difficultyColors[task.difficulty]}`}>
                                 {task.difficulty}
-                              </span>
-                              <span className="text-xs px-3 py-1 rounded-full border bg-blue-100 text-blue-800 border-blue-200">
-                                {task.category}
                               </span>
                             </div>
                           </div>

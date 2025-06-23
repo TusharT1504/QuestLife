@@ -3,7 +3,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCoins } from '@fortawesome/free-solid-svg-icons'
+import { faCoins,faStar } from '@fortawesome/free-solid-svg-icons'
 import avatarImage from '../assets/avatar.avif'
 
 const Navbar = () => {
@@ -84,11 +84,11 @@ const Navbar = () => {
                 {/* User Stats */}
                 <div className="hidden sm:flex items-center space-x-3 text-sm">
                   <div className="flex items-center space-x-1">
-                    <FontAwesomeIcon icon={faCoins} className="text-yellow-500" />
+                    <FontAwesomeIcon icon={faCoins} className="text-grey-800" />
                     <span className="font-medium">{user?.coins || 0}</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <span className="text-blue-500">⭐</span>
+                    <span> <FontAwesomeIcon icon={faStar}/></span>
                     <span className="font-medium">Lv.{user?.level || 1}</span>
                   </div>
                 </div>
@@ -122,7 +122,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   to="/signup"
-                  className="bg-purple-500 hover:bg-purple-600 text-white text-sm font-medium transition-colors duration-200 px-4 py-2 rounded-md"
+                  className="text-gray-600 hover:text-black text-sm font-medium transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100"
                 >
                   Signup
                 </Link>
@@ -176,11 +176,11 @@ const Navbar = () => {
               <div className="px-3 py-2 border-t border-gray-200 mt-4">
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center space-x-1">
-                    <FontAwesomeIcon icon={faCoins} className="text-yellow-500" />
+                    <FontAwesomeIcon icon={faCoins} />
                     <span className="font-medium">{user?.coins || 0} Coins</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <span className="text-blue-500">⭐</span>
+                    <span> <FontAwesomeIcon icon={faStar}/></span>
                     <span className="font-medium">Level {user?.level || 1}</span>
                   </div>
                 </div>

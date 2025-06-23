@@ -58,7 +58,7 @@ const getTodayTasks = async (req, res) => {
         $gte: today,
         $lt: tomorrow
       }
-    }).select('_id title completed xpReward coinReward difficulty category priority');
+    }).select('_id title completed xpReward coinReward difficulty');
 
     res.json(tasks);
   } catch (error) {
@@ -150,41 +150,31 @@ const generateSampleTasks = async (userId) => {
     {
       userId: userId,
       title: "Morning Exercise",
-      difficulty: "hard",
-      category: "daily",
-      priority: "high",
+      difficulty: "epic",
       dueDate: new Date()
     },
     {
       userId: userId,
       title: "Read 30 minutes",
-      difficulty: "medium",
-      category: "daily",
-      priority: "medium",
+      difficulty: "rare",
       dueDate: new Date()
     },
     {
       userId: userId,
       title: "Drink 8 glasses of water",
-      difficulty: "easy",
-      category: "daily",
-      priority: "medium",
+      difficulty: "common",
       dueDate: new Date()
     },
     {
       userId: userId,
       title: "Practice coding",
-      difficulty: "hard",
-      category: "daily",
-      priority: "high",
+      difficulty: "epic",
       dueDate: new Date()
     },
     {
       userId: userId,
       title: "Meditate for 10 minutes",
-      difficulty: "easy",
-      category: "daily",
-      priority: "low",
+      difficulty: "common",
       dueDate: new Date()
     }
   ];

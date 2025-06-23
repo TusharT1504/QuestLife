@@ -108,14 +108,10 @@ const getTaskStats = async (req, res) => {
       totalXP: completedTasks.reduce((sum, task) => sum + task.xpReward, 0),
       totalCoins: completedTasks.reduce((sum, task) => sum + task.coinReward, 0),
       byDifficulty: {
-        easy: completedTasks.filter(task => task.difficulty === 'easy').length,
-        medium: completedTasks.filter(task => task.difficulty === 'medium').length,
-        hard: completedTasks.filter(task => task.difficulty === 'hard').length,
-      },
-      byCategory: {
-        daily: completedTasks.filter(task => task.category === 'daily').length,
-        weekly: completedTasks.filter(task => task.category === 'weekly').length,
-        monthly: completedTasks.filter(task => task.category === 'monthly').length,
+        common: completedTasks.filter(task => task.difficulty === 'common').length,
+        rare: completedTasks.filter(task => task.difficulty === 'rare').length,
+        epic: completedTasks.filter(task => task.difficulty === 'epic').length,
+        legendary: completedTasks.filter(task => task.difficulty === 'legendary').length
       }
     };
 

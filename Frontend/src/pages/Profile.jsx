@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthContext"
 import avatarImage from '../assets/avatar.avif';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTrophy } from "@fortawesome/free-solid-svg-icons"
 
 const Profile = () => {
   const { user, updateUser } = useAuth()
@@ -282,7 +284,7 @@ const Profile = () => {
                 </div>
               ) : (
                 <div className="text-center py-16">
-                  <div className="text-6xl mb-6 opacity-50">🎯</div>
+                  <div className="text-6xl mb-6 opacity-50"><FontAwesomeIcon icon={faTrophy} /></div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-4">No achievements yet</h3>
                   <p className="text-gray-600">Complete more tasks to unlock achievements!</p>
                 </div>
