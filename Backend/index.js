@@ -14,7 +14,16 @@ const taskHistoryRoutes = require("./routes/taskHistoryRoute");
 const profileRoutes = require("./routes/profileRoute");
 
 const app = express();   
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://quest-life.vercel.app",
+    "https://quest-life-tushars-projects-4bd6811b.vercel.app",
+    "https://quest-life-git-main-tushars-projects-4bd6811b.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000",
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
