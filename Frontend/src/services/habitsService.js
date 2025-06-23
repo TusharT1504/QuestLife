@@ -1,6 +1,6 @@
 import { authService } from './authService';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://questlife.onrender.com/api';
 
 const apiRequest = async (endpoint, options = {}) => {
   const token = authService.getToken();
@@ -46,4 +46,4 @@ export const habitsService = {
       method: 'DELETE',
     });
   },
-}; 
+};

@@ -38,7 +38,7 @@ const Marketplace = () => {
   const fetchItems = async () => {
     try {
       setError("")
-      const response = await fetch("http://localhost:5000/api/marketplace/items")
+      const response = await fetch("https://questlife.onrender.com/api/marketplace/items")
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -60,7 +60,7 @@ const Marketplace = () => {
         return
       }
 
-      const response = await fetch("http://localhost:5000/api/marketplace/inventory", {
+      const response = await fetch("https://questlife.onrender.com/api/marketplace/inventory", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -90,7 +90,7 @@ const Marketplace = () => {
         throw new Error("No authentication token found")
       }
 
-      const response = await fetch("http://localhost:5000/api/marketplace/purchase", {
+      const response = await fetch("https://questlife.onrender.com/api/marketplace/purchase", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -348,4 +348,4 @@ const Marketplace = () => {
 }
 
 export default Marketplace
-            
+

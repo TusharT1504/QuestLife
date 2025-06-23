@@ -1,16 +1,18 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://questlife.onrender.com/api';
 
 // Token management
 const getToken = () => {
-  return localStorage.getItem('token');
+  return localStorage.getItem('token') || localStorage.getItem('jwt_token');
 };
 
 const setToken = (token) => {
   localStorage.setItem('token', token);
+  localStorage.setItem('jwt_token', token);
 };
 
 const removeToken = () => {
   localStorage.removeItem('token');
+  localStorage.removeItem('jwt_token');
 };
 
 // API request helper
@@ -98,4 +100,4 @@ export const authService = {
 
   // Get current token
   getToken,
-}; 
+};

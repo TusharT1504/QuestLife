@@ -35,7 +35,7 @@ const TaskHistory = () => {
   const fetchTaskHistory = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/history?page=${currentPage}&limit=10&period=${selectedPeriod}`,
+        `https://questlife.onrender.com/api/history?page=${currentPage}&limit=10&period=${selectedPeriod}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -54,7 +54,7 @@ const TaskHistory = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/history/stats?period=${selectedPeriod}`, {
+      const response = await fetch(`https://questlife.onrender.com/api/history/stats?period=${selectedPeriod}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

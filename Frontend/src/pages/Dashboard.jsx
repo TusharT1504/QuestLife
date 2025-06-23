@@ -339,13 +339,13 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* XP */}
+            {/* XP
             <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6">
               <div className="text-center">
                 <div className="text-sm text-gray-600 mb-2">Total XP</div>
                 <div className="text-3xl font-semibold text-gray-900">{userStats?.xp}</div>
               </div>
-            </div>
+            </div> */}
 
             {/* Coins */}
             <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6">

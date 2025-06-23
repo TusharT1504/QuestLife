@@ -1,5 +1,5 @@
 // API base URL - update this to match your backend URL
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'https://questlife.onrender.com/api';
 
 // JWT token management
 export const getToken = () => {
@@ -90,4 +90,4 @@ export const validatePassword = (password) => {
 
 export const validateUsername = (username) => {
   return username.length >= 3 && /^[a-zA-Z0-9_]+$/.test(username);
-}; 
+};

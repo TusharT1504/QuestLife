@@ -25,7 +25,7 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/profile", {
+      const response = await fetch("https://questlife.onrender.com/api/profile", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -46,7 +46,7 @@ const Profile = () => {
 
   const fetchAchievements = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/profile/achievements", {
+      const response = await fetch("https://questlife.onrender.com/api/profile/achievements", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -60,7 +60,7 @@ const Profile = () => {
 
   const handleSaveProfile = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/profile", {
+      const response = await fetch("https://questlife.onrender.com/api/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

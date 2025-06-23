@@ -1,6 +1,6 @@
 import { authService } from './authService';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://questlife.onrender.com/api';
 
 // API request helper with authentication
 const apiRequest = async (endpoint, options = {}) => {
@@ -58,4 +58,4 @@ export const dashboardService = {
   async getUserProfile() {
     return await apiRequest('/dashboard/profile');
   },
-}; 
+};
